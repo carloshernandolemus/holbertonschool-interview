@@ -20,21 +20,12 @@ def canUnlockAll(boxes):
     if len(boxes) == 1:
         if type(boxes[0]) != list:
             return False
-    for b in boxes:
-        if type(b) != list:
-                return False
-    box_numbers = [num for num in range(1, len(boxes))]
-    box_keys = []
-    for index_of_box in range(1, len(boxes)):
-        for box in boxes:
-            if type(box) != list:
-                return False
-            if boxes.index(box) != index_of_box:
-                for key in box:
-                    if key == index_of_box:
-                        box_keys.append(key)
-    if set(box_numbers) == set(box_keys):
+
+    keys = [0]
+    for num in keys:
+        for var in boxes[num]:
+            if var not in keys and (var != num) and (var < len(boxes)) and (var != 0):
+                keys.append(var)
+    if len(keys) == len(boxes):
         return True
-    else:
-        return False
-        
+    return False
