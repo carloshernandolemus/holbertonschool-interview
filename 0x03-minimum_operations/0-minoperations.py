@@ -18,3 +18,4 @@ def minOperations(n):
             n = n//odd
         odd += 2
     return int(operation)
+    
