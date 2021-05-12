@@ -9,11 +9,11 @@ def minOperations(n):
     operation = 0
     odd = 3
 
-    if n % 2 == 0:
+    while n % 2 == 0:
         operation += 2
         n = n//2
-    if odd <= n:
-        if n % odd == 0:
+    while odd <= n:
+        while n % odd == 0:
             operation += odd
             n = n//odd
         odd += 2
