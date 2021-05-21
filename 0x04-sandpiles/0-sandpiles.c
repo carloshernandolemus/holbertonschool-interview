@@ -1,11 +1,87 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include "sandpiles.h"
 
+
 /**
- * printgrid - Print 3x3 grid
- * @grid: 3x3 grid
- *
+ * sandpiles_sum - add sand matrices
+ *@grid1: first greed
+ *@grid2: second greed
+ * Return: Always 0 (Success)
  */
-void printgrid(int grid[3][3])
+void sandpiles_sum(int grid1[3][3], int grid2[3][3])
+{
+	int a = 0;
+	int x = 0;
+	int y = 0;
+
+	for (x = 0; x < 3; x++)
+	{
+		for (y = 0; y < 3; y++)
+		{
+			grid1[x][y] += grid2[x][y];
+			if (grid1[x][y] > 3)
+			{
+				a = 1;
+			}
+		}
+	}
+		if (a == 1)
+		{
+			printf("=\n");
+			print_grid(grid1);
+			recursion(grid1);
+		}
+}
+
+/**
+ * recursion - reorganize sand
+ *@grid: - first grid
+ * Return: Always 0 (Success)
+ */
+
+void recursion(int grid[3][3])
+{
+	int a = 0;
+	int x = 0;
+	int y = 0;
+
+	for (x = 0; x < 3; x++)
+	{
+		for (y = 0; y < 3; y++)
+		{
+			int num = grid[x][y];
+
+			if (num > 3)
+			{
+				a = 1;
+				grid[x][y] -= 4;
+				if (x + 1 < 3)
+					grid[x + 1][y]++;
+				if (x - 1 >= 0)
+					grid[x - 1][y]++;
+				if (y + 1 < 3)
+					grid[x][y + 1]++;
+				if (y - 1 >= 0)
+					grid[x][y - 1]++;
+			}
+		}
+	}
+	if (a == 1)
+	{
+		printf("=\n");
+		print_grid(grid);
+		recursion(grid);
+	}
+}
+
+/**
+ * print_grid - creates a binary tree node
+ *@grid: grid to be print
+ * Return: Always 0 (Success)
+ */
+
+static void print_grid(int grid[3][3])
 {
 	int i, j;
 
@@ -18,96 +94,5 @@ void printgrid(int grid[3][3])
 			printf("%d", grid[i][j]);
 		}
 		printf("\n");
-	}
-}
-
-
-/**
- * two_d_sum - sum two three dimentional grids
- * @grid1: grid one
- * @grid2: grid two
- *
- */
-void two_d_sum(int grid1[3][3], int grid2[3][3])
-{
-
-	int row, index;
-
-	for (row = 0; row < 3; row++)
-		for (index = 0; index < 3; index++)
-			grid1[row][index] += grid2[row][index];
-}
-
-
-/**
- * is_stable - check if grid is stable no number is bigger than 3
- * @grid: 3x3 grid
- * Return: 1 if True else 0
- */
-int is_stable(int grid[3][3])
-{
-	int i, j;
-
-	for (i = 0; i < 3; i++)
-		for (j = 0; j < 3; j++)
-		{
-			if (grid[i][j] > 3)
-				return (0);
-		}
-
-	return (1);
-}
-
-
-/**
- * tumbler - add one to index's neighbor
- * @row: sub array
- * @index: index at row
- * @grid: 3x3 grid
- *
- */
-void tumbler(int grid[3][3], int row, int index)
-{
-	/* top */
-	if (row - 1 >= 0)
-		grid[row - 1][index] += 1;
-	/* bottom */
-	if (row + 1 < 3)
-		grid[row + 1][index] += 1;
-	/* left */
-	if (index - 1 >= 0)
-		grid[row][index - 1] += 1;
-	/* right */
-	if (index + 1 < 3)
-		grid[row][index + 1] += 1;
-}
-
-
-/**
- * sandpiles_sum - sum sandpiles
- * @grid1: grid 3*3
- * @grid2: grid 3*3
- *
- */
-void sandpiles_sum(int grid1[3][3], int grid2[3][3])
-{
-	int n, index, row = 0;
-
-	two_d_sum(grid1, grid2);
-
-	while (is_stable(grid1) != 1)
-	{
-		printf("=\n");
-		printgrid(grid1);
-		for (row = 0; row < 3; row++)
-			for (index = 0; index < 3; index++)
-			{
-				n = grid1[row][index];
-				if (n > 3)
-				{
-					tumbler(grid1, row, index);
-					grid1[row][index] -= 4;
-				}
-			}
 	}
 }
