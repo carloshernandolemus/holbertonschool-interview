@@ -8,9 +8,11 @@ status_codes = {
     '403': 0, '404': 0, '405': 0, '500': 0,
 }
 
+
 # Global variables
 file_size = 0
 line_count = 0
+
 
 def parse_log(line):
     """Parse log
@@ -24,6 +26,7 @@ def parse_log(line):
     if status_code in status_codes.keys():
         status_codes[status_code] += 1
 
+
 def parse_print():
     """Print status of
     stin
@@ -32,12 +35,14 @@ def parse_print():
     for k, v in sorted(status_codes.items()):
         print("{}: {}".format(k, v))
 
+
 try:
     for line in stdin:
         if line_count % 10 == 0 and line_count != 0:
             parse_print()
         parse_log(line)
         line_count += 1
+
 
 except KeyboardInterrupt:
     parse_print()
