@@ -1,51 +1,52 @@
 #!/usr/bin/python3
+
 """Log Parser"""
+
+
 from sys import stdin
 
+
 # Status codes
-status_codes = {
+total_file_size = {'size': 0}
+codes = {
     '200': 0, '301': 0, '400': 0, '401': 0,
     '403': 0, '404': 0, '405': 0, '500': 0,
 }
 
 
-# Global variables
-file_size = 0
-line_count = 0
-
-
-def parse_log(line):
-    """Parse log
-    GET status code from line
-    increment file size
+def print_data():
     """
-    line = line.split(" ")
-    status_code = line[-2]
-    global file_size
-    file_size += eval(line[-1])
-    if status_code in status_codes.keys():
-        status_codes[status_code] += 1
-
-
-def parse_print():
-    """Print status of
-    stin
+        Prints the resume
     """
-    print("File size: {}".format(file_size))
-    for k, v in sorted(status_codes.items()):
-        print("{}: {}".format(k, v))
+    print('File size: {}'.format(total_file_size['size']))
+    for key in sorted(codes.keys()):
+        if codes[key] > 0:
+            print('{}: {}'.format(key, codes[key]))
 
 
-try:
-    for line in stdin:
-        if line_count % 10 == 0 and line_count != 0:
-            parse_print()
-        parse_log(line)
-        line_count += 1
+def operate_resume(line):
+    """
+        Operates with the resume stats
+    """
+    try:
+        line = line.split(' ')
+        size = line[-1]
+        total_file_size['size'] += int(size)
+        if line[-2] in codes:
+            codes[line[-2]] += 1
+    except Exception as e:
+        pass
 
 
-except KeyboardInterrupt:
-    parse_print()
-    raise
-except BrokenPipeError:
-    pass
+if __name__ == '__main__':
+    num_lines = 1
+    try:
+        for line in sys.stdin:
+            operate_resume(line)
+            if num_lines % 10 == 0:
+                print_data()
+            num_lines += 1
+    except KeyboardInterrupt:
+        print_data()
+        raise
+    print_data()
